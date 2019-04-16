@@ -14,14 +14,14 @@ class SendTrajectory(ActionClient, GiskardBehavior):
     error_code_to_str = {value: name for name, value in vars(FollowJointTrajectoryResult).items() if isinstance(value, int)}
 
     def __init__(self, name, fill_velocity_values,
-                 action_namespace=u'/whole_body_controller/follow_joint_trajectory'):
+                 action_namespace=u'/test_action'):
         GiskardBehavior.__init__(self, name)
         ActionClient.__init__(self, name, FollowJointTrajectoryAction, None, action_namespace)
         self.fill_velocity_values = fill_velocity_values
 
     def setup(self, timeout):
         # TODO get this from god map
-        self.controller_joints = rospy.wait_for_message(u'/whole_body_controller/state',
+        self.controller_joints = rospy.wait_for_message(u'/test_action/state',
                                                         JointTrajectoryControllerState).joint_names
         return super(SendTrajectory, self).setup(timeout)
 
@@ -40,7 +40,9 @@ class SendTrajectory(ActionClient, GiskardBehavior):
         """
         trajectory_msg = JointTrajectory()
         trajectory_msg.joint_names = self.controller_joints
+        print(str(self.controller_joints))
         for time, traj_point in trajectory.items():
+            print(str(traj_point))
             p = JointTrajectoryPoint()
             p.time_from_start = rospy.Duration(time)
             for joint_name in self.controller_joints:

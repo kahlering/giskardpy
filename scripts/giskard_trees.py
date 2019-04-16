@@ -41,8 +41,9 @@ def ini(param_name):
     urdf = resolve_ros_iris_in_urdf(urdf)
     Blackboard().god_map.safe_set_data([robot_description_identifier], urdf)
 
-    msg = rospy.wait_for_message(u'/whole_body_controller/state',
+    msg = rospy.wait_for_message(u'/test_action/state',
                                  JointTrajectoryControllerState)  # type: JointTrajectoryControllerState
+    print(str(msg.joint_names))
     Blackboard().god_map.safe_set_data([controlled_joints_identifier], msg.joint_names)
 
 
@@ -79,7 +80,7 @@ def grow_tree():
 
     action_server_name = u'giskardpy/command'
 
-    ini(u'robot_description')
+    ini(u'/giskard/robot_description')
 
     # ----------------------------------------------
     sync = PluginBehavior(u'sync')

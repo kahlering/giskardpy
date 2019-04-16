@@ -1,0 +1,43 @@
+diff --git a/launch/giskardpy_hsr.launch b/launch/giskardpy_hsr.launch
+index 221bad7..c828a3f 100644
+--- a/launch/giskardpy_hsr.launch
++++ b/launch/giskardpy_hsr.launch
+@@ -1,8 +1,16 @@
+ <launch>
+ 
+   <arg name="gui" default="false" />
++  <arg name="robot_model" default="hsrb4s" />
++  <arg name="visualization" default="true" />
++  <arg name="implicit_damping" default="false" />
++
++  <node pkg="tf2_ros" type="static_transform_publisher" name="fake_localization2"
++        output="screen" args="0 0 0 0 0 0 odom test_link_x" />
+ 
+   <node pkg="giskardpy" type="giskard_trees.py" name="giskard" output="screen">
++    <param name="robot_description"
++      command="$(find xacro)/xacro.py $(find hsr_description)/robots/$(arg robot_model).urdf.xacro gazebo_visualization_enabled:=$(arg visualization) implicit_damping:=$(arg implicit_damping)" />
+     <param name="path_to_data_folder" value="$(find giskardpy)/data/hsr" />
+     <param name="enable_gui" value="$(arg gui)"/>
+     <rosparam param="map_frame">map</rosparam>
+@@ -29,7 +37,7 @@
+   <node pkg="giskardpy" type="interactive_marker.py" name="giskard_interactive_marker" output="screen">
+     <rosparam param="enable_self_collision">False</rosparam>
+     <rosparam param="interactive_marker_chains">
+-      - [base_link, hand_palm_link]
++      - [test_link_x, hand_palm_link]
+     </rosparam>
+   </node>
+ 
+diff --git a/launch/giskardpy_pr2.launch b/launch/giskardpy_pr2.launch
+index 560c515..fe49813 100644
+--- a/launch/giskardpy_pr2.launch
++++ b/launch/giskardpy_pr2.launch
+@@ -19,7 +19,7 @@
+     <rosparam param="collision_time_threshold">15</rosparam>
+     <rosparam param="debug">True</rosparam>
+     <rosparam param="tree_tick_rate">1</rosparam>
+-    <rosparam param="enable_visualization">False</rosparam>
++    <rosparam param="enable_visualization">True</rosparam>
+   </node>
+ 
+   <node pkg="giskardpy" type="interactive_marker.py" name="giskard_interactive_marker" output="screen">

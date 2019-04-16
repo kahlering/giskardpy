@@ -44,4 +44,4 @@ class JointStatePlugin(PluginBase):
         return None
 
     def setup(self):
-        self.joint_state_sub = rospy.Subscriber(u'joint_states', JointState, self.cb, queue_size=1)
+        self.joint_state_sub = rospy.Subscriber(u'/hsrb/joint_states', JointState, self.cb, queue_size=1)

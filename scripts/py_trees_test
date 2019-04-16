@@ -1,0 +1,30 @@
+import py_trees
+
+
+class Adder(py_trees.behaviour.Behaviour):
+    a = 0
+    def __init__(self, name):
+        super(Adder,self).__init__(name)
+
+
+    def update(self):
+        Adder.a +=1
+        if Adder.a <= 10:
+            return py_trees.common.Status.RUNNING
+        return py_trees.common.Status.FAILURE
+
+class Printer(py_trees.behaviour.Behaviour):
+    def __init__(self, name):
+        super(Printer, self).__init__(name)
+
+    def update(self):
+        print(Adder.a)
+        return py_trees.common.Status.SUCCESS
+
+#root = py_trees.composites.Sequence("S")
+root = py_trees.composites.Selector("S")
+ad = Adder("a1")
+pr = Printer("p1")
+root.add_children([ad, pr])
+for i in range(20):
+    root.tick_once()
